@@ -1,0 +1,305 @@
+<div class="width-full invoice-page-container">
+    <div *ngIf="loading" class="loader-container">
+        <div class="loader"></div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="form-card shadow-lg border-0">
+                <div class="card-header-accent"></div>
+
+                <form [formGroup]="memberForm" class="p-4 p-md-5">
+                    <div class="section-title mb-4 d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="bi bi-person-badge me-2"></i>
+                            Donar Information
+                        </div>
+                        <button type="button" class="btn btn-summary-inline d-flex align-items-center gap-2"
+                            (click)="openSummary()">
+                            <i class="bi bi-calendar-event"></i>
+                            Today's Donations
+                        </button>
+                    </div>
+
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <div class="input-group-custom">
+                                <label for="memberId" class="custom-label">Member ID</label>
+                                <div class="input-wrapper">
+                                    <i class="bi bi-hash icon"></i>
+                                    <input id="memberId" formControlName="memberId" class="form-control-custom pe-5"
+                                        placeholder="Enter Member ID (Optional)" (keydown.enter)="searchMember()" />
+                                    <i *ngIf="!searchingMember" class="bi bi-search search-icon" (click)="searchMember()" title="Search Member"></i>
+                                    <div *ngIf="searchingMember" class="search-spinner-container">
+                                        <div class="search-spinner"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group-custom">
+                                <label for="name" class="custom-label">Full Name <span class="required">*</span></label>
+                                <div class="input-wrapper">
+                                    <i class="bi bi-person icon"></i>
+                                    <input id="name" formControlName="name" class="form-control-custom"
+                                        placeholder="Enter Donar Name" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group-custom">
+                                <label for="city" class="custom-label">City/Town</label>
+                                <div class="input-wrapper">
+                                    <i class="bi bi-geo-alt icon"></i>
+                                    <input id="city" formControlName="city" class="form-control-custom"
+                                        placeholder="Enter City" [ngbTypeahead]="searchCity" 
+                                        (focus)="focusC$.next($any($event).target.value)"
+                                        (click)="clickC$.next($any($event).target.value)" #iCity="ngbTypeahead" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group-custom">
+                                <label for="mobile" class="custom-label">Mobile Number</label>
+                                <div class="input-wrapper">
+                                    <i class="bi bi-phone icon"></i>
+                                    <input id="mobile" type="tel" formControlName="mobile" class="form-control-custom"
+                                        placeholder="Enter Mobile" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-title mb-4 mt-5">
+                        <i class="bi bi-currency-rupee me-2"></i>
+                        Payment Details
+                    </div>
+
+                    <div class="row g-4 mb-5">
+                        <div class="col-md-4">
+                            <div class="input-group-custom">
+                                <label for="amount" class="custom-label">Donation Amount <span
+                                        class="required">*</span></label>
+                                <div class="amount-input-wrapper">
+                                    <span class="currency-symbol">₹</span>
+                                    <input id="amount" type="number" formControlName="amount"
+                                        class="form-control-custom amount-input" placeholder="0.00" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group-custom">
+                                <label for="donationType" class="custom-label">Donation Type <span
+                                        class="required">*</span></label>
+                                <div class="input-wrapper">
+                                    <i class="bi bi-bank icon"></i>
+                                    <select id="donationType" formControlName="donationType"
+                                        class="form-control-custom select-custom">
+                                        <option value="UBS">UBS</option>
+                                        <option value="UBS Trust">UBS Trust</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group-custom">
+                                <label for="paymentType" class="custom-label">Payment Type <span
+                                        class="required">*</span></label>
+                                <div class="input-wrapper">
+                                    <i class="bi bi-credit-card icon"></i>
+                                    <select id="paymentType" formControlName="paymentType"
+                                        class="form-control-custom select-custom"
+                                        (change)="onPaymentTypeChange($event)">
+                                        <option value="રોકડા">Cash (રોકડા)</option>
+                                        <option value="UPI">Digital (UPI)</option>
+                                        <option value="ચેક">Cheque (ચેક)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group-custom">
+                                <label for="paymentNo" class="custom-label">Transaction/Chq No.</label>
+                                <div class="input-wrapper"
+                                    [class.disabled]="memberForm?.get('paymentType')?.value === 'રોકડા'">
+                                    <i class="bi bi-info-circle icon"></i>
+                                    <input id="paymentNo" formControlName="paymentNo" class="form-control-custom"
+                                        placeholder="Ref Number" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-section d-flex justify-content-center flex-wrap gap-3 py-4 border-top">
+                        <button type="button" class="btn-modern secondary" (click)="onReset()">
+                            <i class="bi bi-arrow-counterclockwise"></i> Reset
+                        </button>
+                        <button type="button" class="btn-modern outline-primary" [disabled]="!memberForm?.valid"
+                            (click)="generateSlip()">
+                            <i class="bi bi-file-earmark-arrow-down"></i> Preview & Generate
+                        </button>
+                        <button type="submit" class="btn-modern primary" [disabled]="!memberForm?.valid"
+                            (click)="onSubmit()">
+                            <i class="bi bi-cloud-check"></i> Generate & Save Data
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Donation Summary Modal Template (Redesigned) -->
+    <ng-template #content let-modal>
+        <div class="modal-header border-0 pb-0 shadow-sm-bottom">
+            <div>
+                <h4 class="modal-title fw-bold text-dark pt-3 px-3">Today's Donation Summary</h4>
+                <p class="text-muted small px-3 mb-2">Real-time collection analytics for {{ todayDate }}</p>
+            </div>
+            <button type="button" class="btn-close me-2 mt-2" (click)="modal.dismiss('Cross click')"></button>
+        </div>
+        
+        <div class="modal-body p-4 pt-4">
+            <!-- Summary Grid -->
+            <div class="row g-4">
+                <ng-container *ngFor="let summary of donationSummary">
+                    <div class="col-12">
+                        <div class="premium-summary-card shadow-sm" [class.expanded]="expandSummaryDetails && selectedDonarYear === summary.year">
+                            <div class="card-top-accent"></div>
+                            <div class="p-4">
+                                <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="year-badge">
+                                            <i class="bi bi-clock-history"></i>
+                                            <span>Collection Analysis: {{ summary.monthName || 'Summary' }}, {{ summary.year || 'N/A' }}</span>
+                                        </div>
+                                    </div>
+                                    <button class="btn-expand-circular" (click)="viewYearwiseSummary(summary.year, summary.month)">
+                                        <span>{{ expandSummaryDetails && selectedDonarYear === summary.year ? 'Hide' : 'View' }} Records</span>
+                                        <i class="bi ms-2" [ngClass]="expandSummaryDetails && selectedDonarYear === summary.year ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                                    </button>
+                                </div>
+
+                                <div class="row g-3">
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="mini-stat">
+                                            <div class="stat-icon bg-soft-blue">
+                                                <i class="bi bi-people"></i>
+                                            </div>
+                                            <div class="stat-content">
+                                                <label>Total Collections</label>
+                                                <div class="stat-val">{{ summary.totalEntries || 0 }} Entries</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="mini-stat">
+                                            <div class="stat-icon bg-soft-green">
+                                                <i class="bi bi-currency-rupee"></i>
+                                            </div>
+                                            <div class="stat-content">
+                                                <label>Total Collected</label>
+                                                <div class="stat-val success font-numeric">₹{{ (summary.totalDonation || 0).toLocaleString() }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="mini-stat">
+                                            <div class="stat-icon bg-soft-orange">
+                                                <i class="bi bi-bank"></i>
+                                            </div>
+                                            <div class="stat-content">
+                                                <label>UBS Total</label>
+                                                <div class="stat-val primary font-numeric">₹{{ (summary.ubsTotal || 0).toLocaleString() }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="mini-stat">
+                                            <div class="stat-icon bg-soft-purple">
+                                                <i class="bi bi-shield-check"></i>
+                                            </div>
+                                            <div class="stat-content">
+                                                <label>UBS Trust Total</label>
+                                                <div class="stat-val purple font-numeric">₹{{ (summary.ubsTrustTotal || 0).toLocaleString() }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Detailed List (Inline) -->
+                                <div *ngIf="expandSummaryDetails && selectedDonarYear === summary.year" class="detailed-list-container mt-4 pt-4 border-top animate-fade-in">
+                                    <div class="d-flex align-items-center justify-content-between mb-3 px-1">
+                                        <h6 class="fw-bold mb-0 text-primary d-flex align-items-center gap-2">
+                                            <i class="bi bi-list-stars"></i>
+                                            Transaction Records
+                                        </h6>
+                                        <div *ngIf="loadingTransactions" class="d-flex align-items-center gap-2">
+                                            <div class="search-spinner sm"></div>
+                                            <span class="text-muted extra-small">Fetching...</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="table-container-modern shadow-soft">
+                                        <table class="table table-hover align-middle m-0">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center">#</th>
+                                                    <th>Donor Details</th>
+                                                    <th>Location</th>
+                                                    <th class="text-center">Type</th>
+                                                    <th class="text-end">Amount</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <ng-container *ngIf="(donationData$ | async) as data">
+                                                    @for (donation of data; track donation.Name; let i = $index) {
+                                                    <tr class="modern-tr">
+                                                        <td class="text-center text-muted small">{{ i + 1 }}</td>
+                                                        <td>
+                                                            <div class="fw-bold text-dark mb-0">{{ donation.Name }}</div>
+                                                            <div class="text-primary extra-small fw-600">ID: {{ donation['Member Id'] }}</div>
+                                                        </td>
+                                                        <td class="text-muted small">
+                                                            <i class="bi bi-geo-alt me-1"></i>{{ donation.City }}
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <div class="d-flex flex-column gap-1 align-items-center">
+                                                                <span class="modern-badge" [ngClass]="donation.PaymentType.toLowerCase()">
+                                                                    {{ donation.PaymentType }}
+                                                                </span>
+                                                                <span *ngIf="donation.DonationType" class="extra-small text-muted fw-bold">
+                                                                    {{ donation.DonationType }}
+                                                                </span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="text-end">
+                                                            <span class="fw-bold text-dark font-numeric">₹{{ donation.Amount.toLocaleString() }}</span>
+                                                        </td>
+                                                    </tr>
+                                                    } @empty {
+                                                    <tr>
+                                                        <td colspan="5" class="text-center py-5 text-muted">
+                                                            <i class="bi bi-inbox fs-2 d-block mb-2 opacity-25"></i>
+                                                            {{ loadingTransactions ? 'Searching Google Sheets...' : 'No relevant records found.' }}
+                                                        </td>
+                                                    </tr>
+                                                    }
+                                                </ng-container>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+
+        <div class="modal-footer border-0 p-4 pt-3 pb-4">
+            <button type="button" class="btn btn-dark-modern rounded-pill px-4" (click)="modal.close('Close click')">
+                <i class="bi bi-x-circle me-2"></i>Close Summary
+            </button>
+        </div>
+    </ng-template>
+</div>

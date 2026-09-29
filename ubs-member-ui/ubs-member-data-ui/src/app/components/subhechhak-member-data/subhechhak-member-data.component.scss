@@ -1,0 +1,34 @@
+/* Inline edit styles to prevent grid padding/width jumping in edit mode */
+#ubs-members tbody td {
+    vertical-align: middle;
+
+    .form-control {
+        padding: 2px 6px !important;
+        height: auto !important;
+        margin: 0 !important;
+        font-size: inherit;
+        line-height: inherit;
+        min-width: 100px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        box-shadow: none !important;
+
+        &:focus {
+            border-color: #818cf8;
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2) !important;
+        }
+    }
+}
+
+.hover-bg-gray {
+    transition: background-color 0.2s;
+    cursor: pointer;
+}
+
+.hover-bg-gray:hover {
+    background-color: #e2e8f0 !important;
+}
+
+.table-responsive {
+    border: 1px solid #e2e8f0;
+}

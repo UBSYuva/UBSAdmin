@@ -1,0 +1,6 @@
+{
+  "name": "UBS Member Data System",
+  "description": "Integrated UBS Member Data Ecosystem with Express Backend API, Web UI Portal, EntryPass Portal & Scanner, and Flutter App Simulator",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

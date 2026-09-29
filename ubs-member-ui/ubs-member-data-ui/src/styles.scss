@@ -1,0 +1,208 @@
+/* Global Theme Overrides */
+$primary: #4f46e5;
+/* Sleek indigo primary */
+$secondary: #64748b;
+$success: #10b981;
+$info: #0ea5e9;
+$danger: #ef4444;
+
+$font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+$body-bg: #f8fafc;
+/* Clean light grayish-white */
+$body-color: #334155;
+/* Slate dark gray for text */
+$card-border-width: 0;
+$card-border-radius: 12px;
+$card-cap-bg: rgba(255, 255, 255, 0);
+$border-radius: 8px;
+
+@import 'bootstrap/scss/bootstrap';
+
+/* Base Body Styles */
+body {
+    background-color: $body-bg;
+    color: $body-color;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.01em;
+}
+
+/* Custom Overrides & Utilites */
+.card {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    background-color: #ffffff;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(79, 70, 229, 0.03) !important;
+}
+
+.table th {
+    background-color: #f1f5f9;
+    color: #475569;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    border-bottom: 2px solid #e2e8f0 !important;
+    padding: 0.5rem 0.75rem !important;
+}
+
+.table td {
+    color: #334155;
+    vertical-align: middle;
+    padding: 0.5rem 0.75rem !important;
+    font-size: 0.9rem;
+}
+
+.table-bordered> :not(caption)>*>* {
+    border-width: 1px 1px;
+    border-color: #e2e8f0;
+}
+
+/* Form inputs & buttons global styling */
+.form-control {
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.9rem;
+    transition: all 0.2s ease-in-out;
+    box-shadow: none !important;
+
+    &:focus {
+        border-color: #818cf8;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2) !important;
+    }
+}
+
+.btn {
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    transition: all 0.2s;
+
+    &:active,
+    &:focus {
+        transform: translateY(1px);
+    }
+}
+
+.btn-outline-primary {
+    border-width: 2px;
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+}
+
+.login-box {
+    background-color: white;
+    padding: 3rem;
+    border-radius: 16px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    max-width: 420px;
+    width: 100%;
+}
+
+.login-box h2 {
+    margin-bottom: 2rem;
+    text-align: center;
+    color: #1e293b;
+    font-weight: 700;
+}
+
+.login-error {
+    color: #ef4444;
+    font-size: 0.95rem;
+    text-align: center;
+    display: none;
+    margin-top: 1rem;
+}
+
+/* Layout Padding */
+.width-full {
+    width: 100% !important;
+    padding: 1rem 4rem 0 4rem;
+}
+
+.icon-style {
+    font-size: 1.15rem !important;
+    cursor: pointer;
+    transition: transform 0.2s, color 0.2s;
+
+    &:hover {
+        transform: scale(1.1);
+    }
+}
+
+/* Modal Enhancements */
+.modal-content {
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+    border-bottom: 1px solid #f1f5f9;
+    padding: 1.5rem 1.5rem 1rem;
+}
+
+.modal-footer {
+    border-top: 1px solid #f1f5f9;
+}
+
+input[readonly] {
+    background-color: #f8fafc;
+    color: #64748b;
+    cursor: default;
+}
+
+/* Loaders */
+.loader-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(8px);
+    z-index: 1055;
+
+    &::after {
+        content: "";
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        background: white url('logo-new.ico') no-repeat center;
+        background-size: cover;
+        border-radius: 50%;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+}
+
+.loader {
+    border: 3px solid #e2e8f0;
+    border-top: 3px solid $primary;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    animation: spin 1s linear infinite;
+    position: relative;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

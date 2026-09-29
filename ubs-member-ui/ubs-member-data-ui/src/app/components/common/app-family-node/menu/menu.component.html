@@ -1,0 +1,33 @@
+<div class="top-navbar px-4">
+    <div class="navbar-brand me-4 d-flex align-items-center gap-2">
+        <div class="brand-logo bg-primary text-white font-weight-bold rounded px-2 py-1 small">UBS</div>
+        <h5 class="m-0" style="color: #1e293b; font-weight: 700; letter-spacing: -0.02em;">UBS Seva Trust - <span style="color: #4f46e5;">Portal</span></h5>
+    </div>
+
+    <nav class="menu-nav">
+        <ul>
+            <li routerLinkActive="active" *ngIf="haveAccess('members')">
+                <a routerLink="/member"><i class="bi bi-people me-1"></i> Member List</a>
+            </li>
+            <li routerLinkActive="active" *ngIf="haveAccess('shubhechhak')">
+                <a routerLink="/s-member"><i class="bi bi-person-heart me-1"></i> Shubhechhak List</a>
+            </li>
+            <li routerLinkActive="active" *ngIf="haveAccess('donation')">
+                <a routerLink="/mng-donation"><i class="bi bi-receipt me-1"></i> Invoice Generator</a>
+            </li>
+            <li routerLinkActive="active" *ngIf="haveAccess('donation-summary')" [routerLinkActiveOptions]="{ exact: false }">
+                <a routerLink="/donation-summary"><i class="bi bi-wallet2 me-1"></i> Donation Summary</a>
+            </li>
+            <li routerLinkActive="active" *ngIf="haveAccess('report')">
+                <a routerLink="/reports"><i class="bi bi-file-earmark-bar-graph me-1"></i> Reports</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="btn-logout ms-auto d-flex align-items-center gap-2">
+        <span class="badge bg-light text-secondary border font-monospace">{{ userRole | uppercase }}</span>
+        <button class="btn btn-outline-danger btn-sm ms-1 d-flex align-items-center gap-1" (click)="onSignout()" title="Logout">
+            <i class="bi bi-box-arrow-right"></i> Logout
+        </button>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+<!-- Loader -->
+<div *ngIf="loading" class="loader-container">
+    <div>
+        <div class="loader"></div>
+    </div>
+</div>
+
+<!-- Summary & Details Card -->
+<div class="p-1 card border-0 bg-transparent">
+    <div class="px-0">
+
+        <!-- Summary Section -->
+        <ng-container *ngFor="let summary of donationSummary">
+            <div class="card my-1 border-0 shadow-sm bg-white">
+                <div class="card-body p-2">
+
+                    <!-- Header -->
+                    <div
+                        class="d-flex justify-content-between align-items-center mb-2 border-bottom pb-2 flex-wrap gap-2">
+                        <h5 class="mb-0 text-primary fw-bold">
+                            Donation Year {{ summary.monthName }}, {{ summary.year }}
+                        </h5>
+                    </div>
+
+                    <!-- Summary Metrics -->
+                    <div class="row text-center">
+                        <div class="col-md-4 mb-2">
+                            <div class="text-muted small">Total Entries</div>
+                            <div class="fs-5 fw-semibold">{{ summary.totalEntries || '-' }}</div>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <div class="text-muted small">Total Donation</div>
+                            <div class="fs-5 fw-semibold text-success">
+                                ₹ {{ summary.totalDonation || '-' }}
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <div class="text-muted small">Avg. Donation</div>
+                            <div class="fs-5 fw-semibold text-info">
+                                ₹ {{ summary.avgDonation.toFixed(2) || '-' }}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </ng-container>
+
+    </div>
+</div>

@@ -1,0 +1,379 @@
+<div class="width-full">
+	<div *ngIf="loading" class="loader-container">
+		<div>
+			<div class="loader"></div>
+		</div>
+	</div>
+
+	<!-- Summary Section -->
+	<div class="card p-3 mb-2 border-0 shadow-sm bg-white">
+		<form>
+			<div class="row align-items-center">
+				<div class="col-xs-12 col-sm-auto mb-2 mb-sm-0">
+					<label for="table-filtering-search" class="col-form-label fw-bold">Search Shubhechhak</label>
+					<span *ngIf="lastUpdated" class="text-muted ms-2" style="font-size: 10px;">(Last Updated: {{lastUpdated}})</span>
+				</div>
+				<div class="col-xs-12 col-sm-auto mb-2 mb-sm-0">
+					<input id="table-filtering-search" class="form-control" type="text" [formControl]="filter"
+						(keyup)="filterData()" placeholder="Type to search..." />
+				</div>
+				<div class="col-xs-12 col-sm-auto ms-sm-auto mb-2 mb-sm-0 d-flex align-items-center gap-3">
+					<button *ngIf="userRole !== 'viewMembers' && userRole !== 'viewMembersPin' && userRole !== 'onlyView'" 
+						class="btn btn-primary shadow-sm" (click)="openModelDialog()">
+						<i class="bi bi-person-plus me-1"></i> Add New Member
+					</button>
+					<div *ngIf="userRole !== 'viewMembers' && userRole !== 'viewMembersPin' && userRole !== 'onlyView'"
+						class="icon-style p-2 rounded bg-light hover-bg-gray" (click)="downloadShubhechhakPDF()"
+						title="Export to PDF">
+						<i class="bi bi-file-earmark-pdf text-danger"></i>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<div class="table-responsive rounded shadow-sm bg-white border">
+		<table class="table table-bordered table-hover align-middle mb-0" id="ubs-members">
+			<thead>
+				<tr style="text-align: center;">
+					<th scope="col" (click)="onSort('Id')" style="cursor: pointer; width: 60px;">
+						Id
+						<i class="bi"
+							[ngClass]="{'bi-sort-numeric-down': sortColumn === 'Id' && sortDirection === 'asc', 'bi-sort-numeric-up': sortColumn === 'Id' && sortDirection === 'desc', 'bi-arrow-down-up': sortColumn !== 'Id'}"
+							style="font-size: 0.8rem; margin-left: 4px;"></i>
+					</th>
+					<th scope="col" (click)="onSort('Member Id')" style="cursor: pointer;">
+						Member Id
+						<i class="bi"
+							[ngClass]="{'bi-sort-alpha-down': sortColumn === 'Member Id' && sortDirection === 'asc', 'bi-sort-alpha-up': sortColumn === 'Member Id' && sortDirection === 'desc', 'bi-arrow-down-up': sortColumn !== 'Member Id'}"
+							style="font-size: 0.8rem; margin-left: 4px;"></i>
+					</th>
+					<th scope="col" (click)="onSort('Name')" style="cursor: pointer;">
+						Name
+						<i class="bi"
+							[ngClass]="{'bi-sort-alpha-down': sortColumn === 'Name' && sortDirection === 'asc', 'bi-sort-alpha-up': sortColumn === 'Name' && sortDirection === 'desc', 'bi-arrow-down-up': sortColumn !== 'Name'}"
+							style="font-size: 0.8rem; margin-left: 4px;"></i>
+					</th>
+					<th scope="col" (click)="onSort('Date Of Birth')" style="cursor: pointer;">
+						Birth Date
+						<i class="bi"
+							[ngClass]="{'bi-sort-numeric-down': sortColumn === 'Date Of Birth' && sortDirection === 'asc', 'bi-sort-numeric-up': sortColumn === 'Date Of Birth' && sortDirection === 'desc', 'bi-arrow-down-up': sortColumn !== 'Date Of Birth'}"
+							style="font-size: 0.8rem; margin-left: 4px;"></i>
+					</th>
+					<th scope="col" (click)="onSort('Gender')" style="cursor: pointer;">
+						Gender
+						<i class="bi"
+							[ngClass]="{'bi-sort-alpha-down': sortColumn === 'Gender' && sortDirection === 'asc', 'bi-sort-alpha-up': sortColumn === 'Gender' && sortDirection === 'desc', 'bi-arrow-down-up': sortColumn !== 'Gender'}"
+							style="font-size: 0.8rem; margin-left: 4px;"></i>
+					</th>
+					<!-- <th scope="col">Relation</th> -->
+					<th scope="col" (click)="onSort('Married')" style="cursor: pointer;">
+						Married
+						<i class="bi"
+							[ngClass]="{'bi-sort-alpha-down': sortColumn === 'Married' && sortDirection === 'asc', 'bi-sort-alpha-up': sortColumn === 'Married' && sortDirection === 'desc', 'bi-arrow-down-up': sortColumn !== 'Married'}"
+							style="font-size: 0.8rem; margin-left: 4px;"></i>
+					</th>
+					<th scope="col" (click)="onSort('Profession')" style="cursor: pointer;">
+						Profession
+						<i class="bi"
+							[ngClass]="{'bi-sort-alpha-down': sortColumn === 'Profession' && sortDirection === 'asc', 'bi-sort-alpha-up': sortColumn === 'Profession' && sortDirection === 'desc', 'bi-arrow-down-up': sortColumn !== 'Profession'}"
+							style="font-size: 0.8rem; margin-left: 4px;"></i>
+					</th>
+					<th scope="col" (click)="onSort('Mobile')" style="cursor: pointer;">
+						Mobile
+						<i class="bi"
+							[ngClass]="{'bi-sort-numeric-down': sortColumn === 'Mobile' && sortDirection === 'asc', 'bi-sort-numeric-up': sortColumn === 'Mobile' && sortDirection === 'desc', 'bi-arrow-down-up': sortColumn !== 'Mobile'}"
+							style="font-size: 0.8rem; margin-left: 4px;"></i>
+					</th>
+					<th scope="col" (click)="onSort('LastUpdated')" style="cursor: pointer;">
+						Updated
+						<i class="bi"
+							[ngClass]="{'bi-sort-alpha-down': sortColumn === 'LastUpdated' && sortDirection === 'asc', 'bi-sort-alpha-up': sortColumn === 'LastUpdated' && sortDirection === 'desc', 'bi-arrow-down-up': sortColumn !== 'LastUpdated'}"
+							style="font-size: 0.8rem; margin-left: 4px;"></i>
+					</th>
+					<th scope="col" style="width: 100px;">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				@for (member of memberData$ | async; track member.Id; let i = $index) {
+				<tr (dblclick)="(userRole !== 'viewMembers' && userRole !== 'viewMembersPin' && userRole !== 'onlyView') && onCellDblClick($event, member)"
+					(focusout)="editingRowId === member.Id && onRowFocusOut($event, member)"
+					(keyup.enter)="editingRowId === member.Id && updateInlineRow(member)"
+					(keyup.escape)="editingRowId === member.Id && cancelInlineEdit(member)">
+					<td style="text-align: center; color: #64748b; font-weight: bold; font-size: 0.85rem;">
+						{{ member.Id }}
+					</td>
+					<td style="text-align: center;" data-field="Member Id">
+						<input *ngIf="editingRowId === member.Id; else memberIdView" class="form-control text-center"
+							type="text" [(ngModel)]="member['Member Id']" [id]="'inline-edit-Member-Id-' + member.Id" />
+						<ng-template #memberIdView>{{ member['Member Id'] }}</ng-template>
+					</td>
+					<td data-field="Name">
+						<input *ngIf="editingRowId === member.Id; else nameView" class="form-control" type="text"
+							[(ngModel)]="member.Name" [id]="'inline-edit-Name-' + member.Id" />
+						<ng-template #nameView>
+							<div class="d-flex align-items-center">
+								<span>{{ member.Name }}</span>
+								<i *ngIf="member.MobileVerified" class="bi bi-patch-check-fill ms-1" style="font-size: 0.85rem; color: #1d9bf0;" title="Verified Member"></i>
+							</div>
+						</ng-template>
+					</td>
+					<td data-field="Date Of Birth">
+						<input *ngIf="editingRowId === member.Id; else dobView" class="form-control" type="date"
+							[ngModel]="member['Date Of Birth'] | date:'yyyy-MM-dd'"
+							(ngModelChange)="member['Date Of Birth'] = $event"
+							[id]="'inline-edit-Date-Of-Birth-' + member.Id" />
+						<ng-template #dobView>{{member['Date Of Birth'] | date: 'dd/MM/yyyy'}}</ng-template>
+					</td>
+					<td data-field="Gender">
+						<select *ngIf="editingRowId === member.Id; else genderView" class="form-control"
+							[(ngModel)]="member.Gender" [id]="'inline-edit-Gender-' + member.Id">
+							<option value="Male">Male</option>
+							<option value="Female">Female</option>
+						</select>
+						<ng-template #genderView>{{member['Gender']}}</ng-template>
+					</td>
+					<td data-field="Married">
+						<input *ngIf="editingRowId === member.Id; else marriedView" class="form-control" type="text"
+							[(ngModel)]="member.Married" [id]="'inline-edit-Married-' + member.Id"
+							[ngbTypeahead]="searchMarriageStatus" (focus)="focusMR$.next($any($event).target.value)"
+							(click)="clickMR$.next($any($event).target.value)" #iMarriageStatusInline="ngbTypeahead" />
+						<ng-template #marriedView>{{member['Married']}}</ng-template>
+					</td>
+					<td data-field="Profession">
+						<input *ngIf="editingRowId === member.Id; else professionView" class="form-control" type="text"
+							[(ngModel)]="member.Profession" [id]="'inline-edit-Profession-' + member.Id"
+							[ngbTypeahead]="searchProfession" (focus)="focusP$.next($any($event).target.value)"
+							(click)="clickP$.next($any($event).target.value)" #iProfessionInline="ngbTypeahead" />
+						<ng-template #professionView>{{member['Profession']}}</ng-template>
+					</td>
+					<td data-field="Mobile">
+						<div *ngIf="editingRowId === member.Id; else mobileView" class="d-flex align-items-center gap-1">
+							<input class="form-control" type="text" [(ngModel)]="member['Mobile']" [id]="'inline-edit-Mobile-' + member.Id" />
+							<input type="checkbox" [(ngModel)]="member['MobileVerified']" title="Verified" />
+						</div>
+						<ng-template #mobileView>
+							<div class="d-flex align-items-center">
+								<span [class.fw-bold]="member.MobileVerified" [style.color]="member.MobileVerified ? '#1d9bf0' : null">{{member['Mobile']}}</span>
+								<i *ngIf="member.MobileVerified" class="bi bi-patch-check-fill ms-1" style="font-size: 0.85rem; color: #1d9bf0;" title="Verified Mobile"></i>
+							</div>
+						</ng-template>
+					</td>
+					<td data-field="LastUpdated" class="text-center small text-muted" style="font-size: 0.75rem;">
+						{{ member.LastUpdated | date: 'dd/MM/yyyy HH:mm:ss' }}
+					</td>
+					<td>
+						<div class="d-flex justify-content-center" *ngIf="userRole !== 'viewMembers' && userRole !== 'viewMembersPin' && userRole !== 'onlyView'">
+							<ng-container *ngIf="editingRowId === member.Id; else actionsView">
+								<i class="bi bi-save p-1 icon-style text-success" title="Save member"
+									(click)="updateInlineRow(member)"></i>
+								<i class="bi bi-x-circle p-1 icon-style text-danger" title="Cancel editing"
+									(click)="cancelInlineEdit(member)"></i>
+							</ng-container>
+							<ng-template #actionsView>
+								<i class="bi bi-pencil p-1 icon-style text-primary" title="Inline Edit"
+									(click)="startInlineEdit(member)"></i>
+								<i class="bi bi-window p-1 icon-style" title="Modal Edit"
+									(click)="editMemberInfo(member['Id'])"></i>
+								<i class="bi bi-trash p-1 icon-style text-danger" title="Delete member"
+									(click)="deleteMember(member)"></i>
+							</ng-template>
+						</div>
+						<div class="text-center text-muted small" *ngIf="userRole === 'viewMembers' || userRole === 'viewMembersPin' || userRole === 'onlyView'">
+							<i class="bi bi-lock-fill" title="Read Only"></i>
+						</div>
+					</td>
+				</tr>
+				} @empty {
+				<tr>
+					<td colspan="9" style="text-align: center">No data found</td>
+				</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+
+	<!-- Pagination Section -->
+	<div class="d-flex justify-content-between align-items-center mt-2 p-2 bg-white rounded shadow-sm border flex-wrap gap-2">
+		<div class="text-muted small ms-2 d-flex align-items-center gap-2">
+			Showing {{ collectionSize > 0 ? (page - 1) * pageSize + 1 : 0 }} to {{ Math.min(page * pageSize, collectionSize) }} of {{ collectionSize }} entries
+			<select class="form-select form-select-sm w-auto ms-2" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+				<option [ngValue]="10">10 / page</option>
+				<option [ngValue]="25">25 / page</option>
+				<option [ngValue]="50">50 / page</option>
+				<option [ngValue]="100">100 / page</option>
+			</select>
+		</div>
+
+		<div class="d-flex align-items-center gap-3">
+			<div class="d-flex align-items-center gap-1 small text-muted">
+				<span>Go to:</span>
+				<input type="number" class="form-control form-control-sm text-center" style="width: 65px;" [min]="1" [max]="Math.ceil(collectionSize / pageSize) || 1" #pageInput (keyup.enter)="jumpToPage(pageInput.value)" (blur)="jumpToPage(pageInput.value)" [value]="page">
+				<span>/ {{ Math.ceil(collectionSize / pageSize) || 1 }}</span>
+				<button class="btn btn-sm btn-outline-secondary py-0 px-2 ms-1" (click)="jumpToPage(pageInput.value)">Go</button>
+			</div>
+
+			<ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="collectionSize"
+				(pageChange)="refreshTable()" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" [ellipses]="true" class="mb-0">
+			</ngb-pagination>
+		</div>
+	</div>
+</div>
+
+<div>
+	<ng-template #content let-modal>
+
+		<div *ngIf="modelLoading" class="loader-container">
+			<div>
+				<div class="loader"></div>
+			</div>
+		</div>
+
+		<div class="modal-header">
+			<h4 class="modal-title d-flex" id="modal-basic-title">
+				<ng-container *ngIf="addMemberCall">
+					<div>Add Member</div>
+				</ng-container>
+				<ng-container *ngIf="!addMemberCall">
+					<div class="d-flex align-items-center">
+						<span class="me-2">{{upsertMemberDataFormGroup.controls?.name?.value}}</span>
+						<i *ngIf="upsertMemberDataFormGroup.controls?.mobileVerified?.value" class="bi bi-patch-check-fill" style="color: #1d9bf0;" title="Verified Member"></i>
+					</div>
+					<div class="right">
+						<h3 class="ms-2">({{upsertMemberDataFormGroup.controls?.memberId?.value}})</h3>
+					</div>
+				</ng-container>
+			</h4>
+			<button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+		</div>
+		<div class="modal-body">
+			<form [formGroup]="upsertMemberDataFormGroup">
+				<div class="row">
+					<!-- Name Field -->
+					<div class="col-xs-12 col-sm-6 mb-2">
+						<label for="name" class="col-form-label">Name*</label>
+						<input id="name" class="form-control" type="text" formControlName="name" />
+						<div *ngIf="upsertMemberDataFormGroup.get('name').invalid && (upsertMemberDataFormGroup.get('name').dirty || upsertMemberDataFormGroup.get('name').touched)"
+							class="validation-error">
+							Name is required.
+						</div>
+					</div>
+
+					<!-- Date of Birth Field -->
+					<div class="col-xs-12 col-sm-6 mb-2">
+						<label for="dateOfBirth" class="col-form-label">Date of Birth</label>
+						<input class="form-control" placeholder="yyyy-mm-dd" [minDate]="minDate" name="dp"
+							formControlName="dateOfBirth" ngbDatepicker #d="ngbDatepicker" (click)="d.toggle()" />
+					</div>
+				</div>
+
+				<div class="row">
+					<!-- Relation Field -->
+					<div class="col-xs-12 col-sm-6 mb-2">
+						<label for="relation" class="col-form-label">Relation With Parent</label>
+						<input id="typeahead-focus" type="text" class="form-control" formControlName="relation"
+							[ngbTypeahead]="searchRelation" (focus)="focusR$.next($any($event).target.value)"
+							(click)="clickR$.next($any($event).target.value)" #iRelation="ngbTypeahead" />
+						<div *ngIf="upsertMemberDataFormGroup.get('relation').invalid && (upsertMemberDataFormGroup.get('relation').dirty || upsertMemberDataFormGroup.get('relation').touched)"
+							class="validation-error">
+							Relation is required.
+						</div>
+					</div>
+
+					<div class="col-xs-12 col-sm-6 mb-2">
+						<label for="parentMemberId" class="col-form-label">Parent Member Id</label>
+						<input id="parentMemberId" class="form-control" type="text" formControlName="memberId" />
+					</div>
+				</div>
+
+				<div class="row">
+					<!-- Marriage Status Field -->
+					<div class="col-xs-12 col-sm-6 mb-2">
+						<label for="marriageStatus" class="col-form-label">Marriage Status</label>
+						<input id="typeahead-focus" type="text" class="form-control" formControlName="marriageStatus"
+							[ngbTypeahead]="searchMarriageStatus" (focus)="focusMR$.next($any($event).target.value)"
+							(click)="clickMR$.next($any($event).target.value)" #iMarriageStatus="ngbTypeahead" />
+					</div>
+
+					<!-- Mobile Field -->
+					<div class="col-xs-12 col-sm-6 mb-2">
+						<label for="mobile" class="col-form-label d-flex justify-content-between">
+							<span>Mobile*</span>
+							<div class="form-check form-switch d-inline-block small">
+								<input class="form-check-input" type="checkbox" id="mobileVerified" formControlName="mobileVerified">
+								<label class="form-check-label text-primary" for="mobileVerified" style="font-size: 0.75rem; cursor: pointer;">Verified</label>
+							</div>
+						</label>
+						<input id="mobile" class="form-control" type="text" formControlName="mobile" />
+						<div *ngIf="upsertMemberDataFormGroup.get('mobile').invalid && (upsertMemberDataFormGroup.get('mobile').dirty || upsertMemberDataFormGroup.get('mobile').touched)"
+							class="validation-error">
+							Mobile number is required.
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<!-- Profession Field -->
+					<div class="col-xs-12 col-sm-6 mb-2">
+						<label for="profession" class="col-form-label">Profession</label>
+						<input id="typeahead-focus" type="text" class="form-control" formControlName="profession"
+							[ngbTypeahead]="searchProfession" (focus)="focusP$.next($any($event).target.value)"
+							(click)="clickP$.next($any($event).target.value)" #iProfession="ngbTypeahead" />
+					</div>
+
+					<!-- Designation Field -->
+					<div class="col-xs-12 col-sm-6 mb-2">
+						<label for="designation" class="col-form-label">Designation</label>
+						<input id="designation" class="form-control" type="text" formControlName="designation" />
+					</div>
+				</div>
+
+				<div class="row">
+					<!-- Company Name Field -->
+					<div class="col-xs-12 col-sm-6 mb-2">
+						<label for="company" class="col-form-label">Company Name</label>
+						<input id="company" class="form-control" type="text" formControlName="company" />
+					</div>
+
+					<!-- Blood Group Field -->
+					<div class="col-xs-12 col-sm-6 mb-2">
+						<label for="bloodGroup" class="col-form-label">Blood Group</label>
+						<input id="typeahead-focus" type="text" class="form-control" formControlName="bloodGroup"
+							[ngbTypeahead]="searchBloodGroup" (focus)="focusBG$.next($any($event).target.value)"
+							(click)="clickBG$.next($any($event).target.value)" #iBloodGroup="ngbTypeahead" />
+					</div>
+				</div>
+				<div class="row">
+					<!-- Gender Field -->
+					<div class="col-xs-12 col-sm-6 mb-2">
+						<label for="gender" class="col-form-label">Gender</label>
+						<select id="gender" class="form-control" formControlName="gender">
+							<option value="" selected>Select Gender</option>
+							<option value="Male">Male</option>
+							<option value="Female">Female</option>
+						</select>
+					</div>
+					<!-- City Field -->
+					<div class="col-xs-12 col-sm-6 mb-2">
+						<label for="city" class="col-form-label">City</label>
+						<input id="city" class="form-control" type="text" formControlName="city"
+							[ngbTypeahead]="searchCity" (focus)="focusC$.next($any($event).target.value)"
+							(click)="clickC$.next($any($event).target.value)" #iCity="ngbTypeahead" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 mb-2">
+						<label for="address" class="col-form-label">Address</label>
+						<textarea id="address" [rows]="2" class="form-control" type="text"
+							formControlName="address"></textarea>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-outline-secondary w-auto" [disabled]="!upsertMemberDataFormGroup.valid"
+				(click)="createUpdateNewMember(upsertMemberDataFormGroup.get('id')?.value)">Save</button>
+		</div>
+	</ng-template>
+	<pre>{{ closeResult() }}</pre>
+</div>

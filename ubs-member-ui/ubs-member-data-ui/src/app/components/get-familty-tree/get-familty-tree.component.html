@@ -1,0 +1,60 @@
+<div class="tree-container" id="container">
+  <div class="header-sync">
+    <div class="title-row">
+      <h2>Family Tree</h2>
+      <button class="refresh-btn" (click)="fetchMembers()">
+        <span class="material-icons">refresh</span>
+      </button>
+    </div>
+    <div class="search-box">
+      <span class="material-icons">search</span>
+      <input type="text" [(ngModel)]="searchQuery" (input)="filterTree()" placeholder="Search by Member ID...">
+    </div>
+  </div>
+
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Generating Family Trees...</p>
+  </div>
+
+  <div class="forest" *ngIf="!isLoading">
+    <div class="tree-root-container" *ngFor="let root of filteredRoots">
+      <ng-container *ngTemplateOutlet="nodeTemplate; context: { $implicit: root }"></ng-container>
+      <div class="tree-separator"></div>
+    </div>
+  </div>
+</div>
+
+<ng-template #nodeTemplate let-node>
+  <div class="node-group">
+    <!-- Parent Couple -->
+    <div class="couple-container">
+      <div class="member-box husband" *ngIf="node.husband">
+        <span class="relation">{{ node.husband.Relation || 'SELF' }}</span>
+        <span class="name">{{ node.husband.Name }}</span>
+        <span class="id">ID: {{ node.husband['Member Id'] }}</span>
+      </div>
+      
+      <div class="marriage-line" *ngIf="node.husband && node.wife"></div>
+      
+      <div class="member-box wife" *ngIf="node.wife">
+        <span class="relation">{{ node.wife.Relation || 'WIFE' }}</span>
+        <span class="name">{{ node.wife.Name }}</span>
+        <span class="id">ID: {{ node.wife['Member Id'] }}</span>
+      </div>
+    </div>
+
+    <!-- Connector down to children -->
+    <div class="connector-down" *ngIf="node.children.length > 0"></div>
+
+    <!-- Children Row -->
+    <div class="children-row" *ngIf="node.children.length > 0">
+      <div class="child-branch" *ngFor="let childNode of node.children; let i = index; let last = last; let first = first" 
+           [class.first]="first" [class.last]="last" [class.single]="node.children.length === 1">
+        <div class="connector-horizontal"></div>
+        <div class="connector-vertical"></div>
+        <ng-container *ngTemplateOutlet="nodeTemplate; context: { $implicit: childNode }"></ng-container>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,1 @@
+export const sessionPeriod:number = 1440; // in minutes

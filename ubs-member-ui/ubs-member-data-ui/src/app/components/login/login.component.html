@@ -1,0 +1,37 @@
+<div class="login-container" [class.loading]="isLoading">
+    <div class="login-box shadow-lg" *ngIf="!isLoading">
+        <div class="text-center mb-4">
+            <img src="logo-new.ico" width="80px" class="mb-3 rounded-circle shadow-sm" style="aspect-ratio: 1/1; object-fit: cover;">
+            <h4 class="auth-title">UBS Admin Access</h4>
+            <p class="text-muted small">Enter security PIN to continue</p>
+        </div>
+
+        <div class="form-group mb-4">
+            <label class="small fw-semibold mb-2 text-secondary">Security PIN</label>
+            <div class="input-group">
+                <span class="input-group-text bg-light border-end-0"><i class="bi bi-shield-lock"></i></span>
+                <input type="password" 
+                       [(ngModel)]="pinEntered"
+                       class="form-control border-start-0 ps-0" 
+                       placeholder="Enter 4-digit PIN" 
+                       maxlength="4"
+                       (keyup.enter)="onSubmit()">
+            </div>
+            
+            <div class="error-msg text-danger small mt-2" *ngIf="invalidCredential">
+                <i class="bi bi-exclamation-circle me-1"></i> Invalid PIN. Please try again.
+            </div>
+        </div>
+
+        <button class="btn btn-primary w-100 py-2 fs-6 shadow-sm mt-2" 
+                (click)="onSubmit()"
+                [disabled]="pinEntered.length < 4">
+            Sign In & Continue <i class="bi bi-arrow-right ms-1"></i>
+        </button>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div class="spinner-border text-primary" role="status" *ngIf="isLoading">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>

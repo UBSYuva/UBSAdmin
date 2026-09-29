@@ -1,0 +1,83 @@
+# ========================
+# .NET Core / Visual Studio
+# ========================
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+bin/
+Bin/
+obj/
+Obj/
+*.suo
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+*.pubxml
+*.pubxml.user
+.config/
+
+# ========================
+# Node.js
+# ========================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# ========================
+# Angular
+# ========================
+dist/
+.angular/
+tmp/
+out-tsc/
+bazel-out/
+
+# ========================
+# Environment / Secrets
+# ========================
+.env
+.env.local
+.env.*.local
+*.env
+
+# ========================
+# Logs
+# ========================
+logs/
+*.log
+
+# ========================
+# Flutter & Android Tools
+# ========================
+flutter/
+android_sdk/
+jdk/
+*.zip
+ubs_member_data_flutter/build/
+ubs_member_data_flutter/.dart_tool/
+ubs_member_data_flutter/.flutter-plugins
+ubs_member_data_flutter/.flutter-plugins-dependencies
+ubs_member_data_flutter/.metadata
+ubs_member_data_flutter/analysis_options.yaml
+
+# ========================
+# OS / Editor
+# ========================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# ========================
+# Test / Coverage
+# ========================
+coverage/
+.nyc_output/

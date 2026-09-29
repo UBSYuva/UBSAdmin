@@ -1,0 +1,7 @@
+<li>
+    <a href="#">{{ member.name }}</a>
+    <a class="spouse" *ngIf="member.spouse" href="#">{{ member.spouse }}</a>
+    <ul>
+        <li [member]="member" familyTreeNode *ngFor="let child of member.children" [member]="child"></li>
+    </ul>
+</li>
